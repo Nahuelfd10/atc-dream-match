@@ -12,11 +12,13 @@ interface Player {
 
 interface PlayerListProps {
   onAddPlayerToTeam: (playerName: string, teamId: number) => void;
+  onRemovePlayerFromTeam: (playerName: string, teamId: number) => void;
   teams: { id: number; name: string; players: string[] }[];
 }
 
 const PlayerList: React.FC<PlayerListProps> = ({
   onAddPlayerToTeam,
+  onRemovePlayerFromTeam,
   teams,
 }) => {
   const famousPlayers: Player[] = [
@@ -95,7 +97,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
   const getPlayerTeam = (playerName: string) => {
     for (const team of teams) {
       if (team.players.includes(playerName)) {
-        return team.name;
+        return team;
       }
     }
     return null;
@@ -127,9 +129,22 @@ const PlayerList: React.FC<PlayerListProps> = ({
                 <td className="px-4 py-2 text-gray-300">{player.player_age}</td>
                 <td className="px-4 py-2">
                   {playerTeam ? (
-                    <span className="text-green-400">
-                      Jugador de equipo {playerTeam}
-                    </span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-green-400">
+                        Jugador de equipo {playerTeam.name}
+                      </span>
+                      <button
+                        onClick={() =>
+                          onRemovePlayerFromTeam(
+                            player.player_name,
+                            playerTeam.id
+                          )
+                        }
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                      >
+                        Quitar
+                      </button>
+                    </div>
                   ) : (
                     teams.map((team) => (
                       <button
