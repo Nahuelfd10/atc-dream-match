@@ -41,23 +41,30 @@ const PlayerList: React.FC = () => {
     loadPlayers();
   }, []);
 
-  if (loading) return <p>Cargando jugadores...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p className="text-white">Cargando jugadores...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Lista de Jugadores</h2>
-      <ul className="list-disc list-inside">
+    <div className="w-full max-w-4xl">
+      <h2 className="text-2xl font-bold mb-4 text-white">Lista de Jugadores</h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {players.map((player) => (
-          <li key={player.player_id} className="mb-4">
+          <li
+            key={player.player_id}
+            className="bg-white p-4 rounded-lg shadow-md flex items-center"
+          >
             <img
               src={player.player_image}
               alt={player.player_name}
-              width={50}
+              className="w-16 h-16 rounded-full mr-4"
             />
-            <p>Nombre: {player.player_name}</p>
-            <p>Equipo: {player.team_name}</p>
-            <p>Edad: {player.player_age}</p>
+            <div>
+              <p className="text-lg font-semibold">{player.player_name}</p>
+              <p className="text-sm text-gray-600">
+                Equipo: {player.team_name}
+              </p>
+              <p className="text-sm text-gray-600">Edad: {player.player_age}</p>
+            </div>
           </li>
         ))}
       </ul>

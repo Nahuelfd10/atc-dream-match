@@ -62,15 +62,15 @@ const TeamManagement: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-4">Gestionar Equipos</h2>
+    <div className="w-full max-w-lg bg-gray-700 p-6 rounded-lg shadow-lg mt-6">
+      <h2 className="text-2xl font-bold mb-4 text-white">Gestionar Equipos</h2>
       <div className="mb-4">
         <input
           type="text"
           value={newTeamName}
           onChange={(e) => setNewTeamName(e.target.value)}
           placeholder="Nombre del equipo"
-          className="border border-gray-300 rounded py-2 px-3 mr-2"
+          className="border border-gray-300 rounded py-2 px-3 mr-2 w-full mb-2"
         />
         <button
           onClick={editingTeam ? saveEdit : createTeam}
@@ -78,23 +78,26 @@ const TeamManagement: React.FC = () => {
             editingTeam
               ? "bg-yellow-500 hover:bg-yellow-700"
               : "bg-green-500 hover:bg-green-700"
-          } text-white font-bold py-2 px-4 rounded`}
+          } text-white font-bold py-2 px-4 rounded w-full mb-2`}
         >
           {editingTeam ? "Guardar" : "Crear Equipo"}
         </button>
         {editingTeam && (
           <button
             onClick={() => setEditingTeam(null)}
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full"
           >
             Cancelar
           </button>
         )}
       </div>
-      <ul>
+      <ul className="space-y-2">
         {teams.map((team) => (
-          <li key={team.id} className="flex justify-between items-center mb-2">
-            <span>{team.name}</span>
+          <li
+            key={team.id}
+            className="flex justify-between items-center bg-gray-600 p-4 rounded-lg"
+          >
+            <span className="text-white">{team.name}</span>
             <div>
               <button
                 onClick={() => startEditing(team)}
