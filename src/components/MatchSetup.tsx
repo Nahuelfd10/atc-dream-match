@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import PlayerList from "@/components/PlayerList";
-import { Player, recommendedPlayers } from "@/utils/recommendedPlayers";
+import { recommendedPlayers, Player } from "@/utils/recommendedPlayers";
 import TeamList from "@/components/TeamList";
+import MatchStatistics from "@/components/MatchStatistics";
+import { motion } from "framer-motion";
 
 interface Team {
   id: number;
@@ -17,6 +19,8 @@ const MatchSetup: React.FC = () => {
     { id: 2, name: "Equipo 2", players: [] },
   ]);
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
+  const [showStatistics, setShowStatistics] = useState<boolean>(false);
+  const [statistics, setStatistics] = useState<any>(null);
 
   const addPlayerToTeam = (player: Player, teamId: number) => {
     const teamIndex = teams.findIndex((team) => team.id === teamId);
@@ -98,7 +102,58 @@ const MatchSetup: React.FC = () => {
       { id: 1, name: "Equipo 1", players: [] },
       { id: 2, name: "Equipo 2", players: [] },
     ]);
+    setShowStatistics(false);
+    setStatistics(null);
   };
+
+  const startMatch = () => {
+    // Simulate match statistics
+    const stats = {
+      team1: teams[0].name,
+      team2: teams[1].name,
+      score1: Math.floor(Math.random() * 5),
+      score2: Math.floor(Math.random() * 5),
+      statistics: {
+        totalShots: [
+          Math.floor(Math.random() * 15) + 5,
+          Math.floor(Math.random() * 15) + 5,
+        ],
+        shotsOnTarget: [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+        ],
+        tackles: [
+          Math.floor(Math.random() * 20),
+          Math.floor(Math.random() * 20),
+        ],
+        fouls: [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)],
+        bookings: [
+          Math.floor(Math.random() * 5),
+          Math.floor(Math.random() * 5),
+        ],
+        corners: [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+        ],
+        offsides: [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+        ],
+        possession: [
+          Math.floor(Math.random() * 100),
+          0, // This will be calculated correctly below
+        ],
+      },
+    };
+
+    // Ensure the possession percentages sum up to 100
+    stats.statistics.possession[1] = 100 - stats.statistics.possession[0];
+
+    setStatistics(stats);
+    setShowStatistics(true);
+  };
+
+  const areTeamsFull = teams.every((team) => team.players.length >= 5);
 
   return (
     <div className="w-full max-w-4xl flex flex-col items-center">
@@ -113,7 +168,7 @@ const MatchSetup: React.FC = () => {
           backgroundSize: "cover",
         }}
       >
-        <div className="flex justify-between w-full px-12">
+        <div className="flex justify-between space-x-8 w-full">
           {teams.map((team) => (
             <TeamList
               key={team.id}
@@ -140,33 +195,52 @@ const MatchSetup: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full mt-4">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-2xl font-bold text-white">Lista de Jugadores</h2>
-          <div className="flex space-x-2">
-            <button
-              onClick={generateRandomTeams}
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded flex items-center"
+      <div className="w-full mt-3">
+        <div className="flex justify-between items-center mb-4">
+          <button
+            onClick={generateRandomTeams}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+          >
+            Añadir aleatoriamente
+            <span className="ml-2">🔀</span>
+          </button>
+
+          {areTeamsFull && (
+            <motion.div
+              className="relative z-10 flex justify-center"
+              initial={{ opacity: 0, scale: 2 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
             >
-              Añadir aleatoriamente
-              <span className="ml-2">🔀</span>
-            </button>
-            <button
-              onClick={resetTeams}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center"
-            >
-              Reiniciar Equipos
-              <span className="ml-2">🔄</span>
-            </button>
-          </div>
+              <motion.button
+                onClick={startMatch}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl shadow-lg text-lg transform hover:scale-105 transition-transform"
+              >
+                Comenzar Partido
+              </motion.button>
+            </motion.div>
+          )}
+
+          <button
+            onClick={resetTeams}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center"
+          >
+            Reiniciar Equipos
+            <span className="ml-2">🔄</span>
+          </button>
         </div>
-        <PlayerList
-          teams={teams}
-          onAddPlayerToTeam={(player: Player, teamId: number) => {
-            addPlayerToTeam(player, teamId);
-          }}
-          onRemovePlayerFromTeam={removePlayerFromTeam}
-        />
+
+        {showStatistics ? (
+          <MatchStatistics stats={statistics} />
+        ) : (
+          <PlayerList
+            teams={teams}
+            onAddPlayerToTeam={(player: Player, teamId: number) => {
+              addPlayerToTeam(player, teamId);
+            }}
+            onRemovePlayerFromTeam={removePlayerFromTeam}
+          />
+        )}
       </div>
     </div>
   );
