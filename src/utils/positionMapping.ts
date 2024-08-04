@@ -2,14 +2,16 @@
 
 export const mapPlayerTypeToSpanish = (playerType: string): string => {
   switch (playerType) {
-    case "Forward":
+    case "Forwards":
       return "DEL";
-    case "Midfield":
+    case "Midfielders":
       return "MED";
-    case "Defender":
+    case "Defenders":
       return "DEF";
     case "Goalkeepers":
       return "ARQ";
+    case "Coach":
+      return "TEC";
     default:
       return "N/A";
   }

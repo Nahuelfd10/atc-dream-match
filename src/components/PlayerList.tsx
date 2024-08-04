@@ -4,22 +4,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import { fetchPlayers } from "@/utils/api";
 import { debounce } from "lodash";
 import Modal from "@/components/Modal";
-import { recommendedPlayers } from "@/utils/recommendedPlayers";
+import { recommendedPlayers, Player } from "@/utils/recommendedPlayers";
 import { mapPlayerTypeToSpanish } from "@/utils/positionMapping";
 
-interface Player {
-  player_id: string;
-  player_name: string;
-  team_name: string;
-  player_image: string;
-  player_age: number;
-  player_type: string;
-}
-
 interface PlayerListProps {
-  onAddPlayerToTeam: (playerName: string, teamId: number) => void;
-  onRemovePlayerFromTeam: (playerName: string, teamId: number) => void;
-  teams: { id: number; name: string; players: string[] }[];
+  onAddPlayerToTeam: (player: Player, teamId: number) => void;
+  onRemovePlayerFromTeam: (playerId: string, teamId: number) => void;
+  teams: { id: number; name: string; players: Player[] }[];
 }
 
 const PlayerList: React.FC<PlayerListProps> = ({
@@ -91,9 +82,9 @@ const PlayerList: React.FC<PlayerListProps> = ({
     setCurrentPage(0);
   };
 
-  const getPlayerTeam = (playerName: string) => {
+  const getPlayerTeam = (playerId: string) => {
     for (const team of teams) {
-      if (team.players.includes(playerName)) {
+      if (team.players.some((player) => player.player_id === playerId)) {
         return team;
       }
     }
@@ -117,7 +108,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
     }
   };
 
-  const handleAddPlayer = (playerName: string, teamId: number) => {
+  const handleAddPlayer = (player: Player, teamId: number) => {
     const teamIndex = teams.findIndex((team) => team.id === teamId);
     if (teamIndex === -1) return;
 
@@ -127,13 +118,17 @@ const PlayerList: React.FC<PlayerListProps> = ({
       return;
     }
 
-    if (teams.some((team) => team.players.includes(playerName))) {
+    if (
+      teams.some((team) =>
+        team.players.some((p) => p.player_id === player.player_id)
+      )
+    ) {
       setModalMessage(`Este jugador ya está en un equipo.`);
       setIsModalOpen(true);
       return;
     }
 
-    onAddPlayerToTeam(playerName, teamId);
+    onAddPlayerToTeam(player, teamId);
   };
 
   const areTeamsFull = teams.every((team) => team.players.length >= 5);
@@ -187,13 +182,13 @@ const PlayerList: React.FC<PlayerListProps> = ({
             </tr>
           ) : (
             paginatedPlayers.map((player) => {
-              const playerTeam = getPlayerTeam(player.player_name);
+              const playerTeam = getPlayerTeam(player.player_id);
               const isPlayerOnTeam = playerTeam !== null;
 
               return (
                 <tr key={player.player_id} className="border-t border-gray-600">
                   <td className="px-4 py-2 text-gray-300 flex items-center">
-                    <span className="inline-block w-12 h-6 bg-gray-700 text-white rounded-md text-center mr-2 flex items-center justify-center">
+                    <span className="inline-block w-12 h-6 bg-green-600 text-white rounded-md text-center mr-2 flex items-center justify-center">
                       {mapPlayerTypeToSpanish(player.player_type)}
                     </span>
                     {player.player_name}
@@ -210,7 +205,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
                         <button
                           onClick={() =>
                             onRemovePlayerFromTeam(
-                              player.player_name,
+                              player.player_id,
                               playerTeam!.id
                             )
                           }
@@ -225,9 +220,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
                       teams.map((team) => (
                         <button
                           key={team.id}
-                          onClick={() =>
-                            handleAddPlayer(player.player_name, team.id)
-                          }
+                          onClick={() => handleAddPlayer(player, team.id)}
                           disabled={team.players.length >= 5}
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2 disabled:opacity-50"
                         >

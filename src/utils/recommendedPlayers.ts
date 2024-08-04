@@ -16,7 +16,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Paris Saint-Germain",
     player_image: "https://via.placeholder.com/150",
     player_age: 34,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "2",
@@ -24,7 +24,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Al Nassr",
     player_image: "https://via.placeholder.com/150",
     player_age: 36,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "3",
@@ -32,7 +32,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Paris Saint-Germain",
     player_image: "https://via.placeholder.com/150",
     player_age: 29,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "4",
@@ -40,7 +40,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Paris Saint-Germain",
     player_image: "https://via.placeholder.com/150",
     player_age: 22,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "5",
@@ -48,7 +48,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "FC Barcelona",
     player_image: "https://via.placeholder.com/150",
     player_age: 33,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "6",
@@ -56,7 +56,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Manchester City",
     player_image: "https://via.placeholder.com/150",
     player_age: 21,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "7",
@@ -64,7 +64,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Real Madrid",
     player_image: "https://via.placeholder.com/150",
     player_age: 35,
-    player_type: "Midfield",
+    player_type: "Midfielders",
   },
   {
     player_id: "8",
@@ -72,7 +72,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Manchester City",
     player_image: "https://via.placeholder.com/150",
     player_age: 30,
-    player_type: "Midfield",
+    player_type: "Midfielders",
   },
   {
     player_id: "9",
@@ -80,7 +80,7 @@ export const recommendedPlayers: Player[] = [
     team_name: "Liverpool",
     player_image: "https://via.placeholder.com/150",
     player_age: 29,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
   {
     player_id: "10",
@@ -88,6 +88,6 @@ export const recommendedPlayers: Player[] = [
     team_name: "Tottenham Hotspur",
     player_image: "https://via.placeholder.com/150",
     player_age: 28,
-    player_type: "Forward",
+    player_type: "Forwards",
   },
 ];
