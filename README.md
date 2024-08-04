@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ATC Dream Match
 
-## Getting Started
+## Descripción
 
-First, run the development server:
+**ATC Dream Match** es una aplicación web que permite a los usuarios crear un partido de fútbol 5 con sus jugadores favoritos, seleccionando jugadores sin restricciones de posición, presupuesto o contrato.
 
-```bash
+## Características
+
+- Crear dos equipos con hasta 5 jugadores cada uno.
+- Nombrar y editar los nombres de los equipos.
+- Vincular jugadores a equipos desde un listado de jugadores.
+- Visualizar cuándo los equipos están completos.
+- Simular el partido obteniendo un ganador y sus estadísticas.
+
+## Tecnologías Usadas
+
+- **Next.js**: Framework para React que permite la creación de aplicaciones web modernas.
+- **TypeScript**: Superset de JavaScript que añade tipos estáticos.
+- **Tailwind CSS**: Framework de CSS para el diseño de interfaces.
+- **Docker**: Para contenedores de aplicaciones.
+
+## Requisitos Previos
+
+- **Node.js** v16 o superior
+- **Docker** (opcional para ejecutar en contenedor)
+
+## Instalación
+
+1. **Clona el repositorio:**
+
+   git clone https://github.com/Nahuelfd10/atc-dream-match.git
+   cd atc-dream-match
+
+2. **Instalar las dependencias:**
+   npm install
+
+## Uso
+
+# Ejecutar Localmente
+
+**Para iniciar la aplicación en modo desarrollo, ejecuta:**
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Luego, abre tu navegador y accede a la aplicación en: http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Ejecutar con Docker
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Para construir la imagen Docker, ejecuta:**
+docker-compose build
 
-## Learn More
+**Para iniciar el contenedor Docker, ejecuta:**
+docker-compose up
 
-To learn more about Next.js, take a look at the following resources:
+- Luego, abre tu navegador y accede a la aplicación en: http://localhost:3000.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Testing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Ejecuta los tests usando Jest con:**
+npm test
