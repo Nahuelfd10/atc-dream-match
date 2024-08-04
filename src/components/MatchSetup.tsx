@@ -107,7 +107,6 @@ const MatchSetup: React.FC = () => {
   };
 
   const startMatch = () => {
-    // Simulate match statistics
     const stats = {
       team1: teams[0].name,
       team2: teams[1].name,
@@ -139,14 +138,10 @@ const MatchSetup: React.FC = () => {
           Math.floor(Math.random() * 10),
           Math.floor(Math.random() * 10),
         ],
-        possession: [
-          Math.floor(Math.random() * 100),
-          0, // This will be calculated correctly below
-        ],
+        possession: [Math.floor(Math.random() * 100), 0],
       },
     };
 
-    // Ensure the possession percentages sum up to 100
     stats.statistics.possession[1] = 100 - stats.statistics.possession[0];
 
     setStatistics(stats);
@@ -156,11 +151,13 @@ const MatchSetup: React.FC = () => {
   const areTeamsFull = teams.every((team) => team.players.length >= 5);
 
   return (
-    <div className="w-full max-w-4xl flex flex-col items-center">
+    <div className="w-full max-w-4xl flex flex-col items-center relative">
       <h2 className="text-3xl font-bold mb-4 text-white">Dream Match</h2>
 
       <div
-        className="flex justify-between items-center w-full mt-6 mb-4 relative bg-cover bg-center rounded-lg p-5"
+        className={`${
+          showStatistics ? "blur-md" : ""
+        } flex justify-between items-center w-full mt-6 mb-4 relative bg-cover bg-center rounded-lg p-5`}
         style={{
           backgroundImage: "url('/cancha3d.gif')",
           height: "320px",
@@ -196,7 +193,11 @@ const MatchSetup: React.FC = () => {
       </div>
 
       <div className="w-full mt-3">
-        <div className="flex justify-between items-center mb-4">
+        <div
+          className={`${
+            showStatistics ? "hidden" : "flex"
+          } justify-between items-center mb-4`}
+        >
           <button
             onClick={generateRandomTeams}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
@@ -231,7 +232,22 @@ const MatchSetup: React.FC = () => {
         </div>
 
         {showStatistics ? (
-          <MatchStatistics stats={statistics} />
+          <>
+            <div className="absolute inset-0 flex justify-center items-center z-10 mb-80">
+              <motion.button
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                onClick={resetTeams}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transform hover:scale-105 transition-transform z-20"
+              >
+                Crear Nuevo Partido
+              </motion.button>
+            </div>
+            <div className="z-0">
+              <MatchStatistics stats={statistics} />
+            </div>
+          </>
         ) : (
           <PlayerList
             teams={teams}
