@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { fetchPlayers } from "@/utils/api";
 import { debounce } from "lodash";
 import Modal from "@/components/Modal";
@@ -28,7 +28,8 @@ const PlayerList: React.FC<PlayerListProps> = ({
   teams,
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [displayedPlayers, setDisplayedPlayers] = useState<Player[]>([]);
+  const [displayedPlayers, setDisplayedPlayers] =
+    useState<Player[]>(recommendedPlayers);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -60,7 +61,13 @@ const PlayerList: React.FC<PlayerListProps> = ({
             player_age: player.player_age,
             player_type: player.player_type,
           }));
-          setDisplayedPlayers(mappedPlayers);
+
+          if (mappedPlayers.length > 0) {
+            setDisplayedPlayers(mappedPlayers);
+          } else {
+            setDisplayedPlayers([]);
+          }
+
           setCurrentPage(0);
         } catch (error) {
           console.error("Error fetching players:", error);
@@ -76,6 +83,12 @@ const PlayerList: React.FC<PlayerListProps> = ({
     const query = event.target.value;
     setSearchQuery(query);
     debouncedSearch(query);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setDisplayedPlayers(recommendedPlayers);
+    setCurrentPage(0);
   };
 
   const getPlayerTeam = (playerName: string) => {
@@ -123,27 +136,34 @@ const PlayerList: React.FC<PlayerListProps> = ({
     onAddPlayerToTeam(playerName, teamId);
   };
 
-  const areTeamsFull =
-    teams.every((team) => team.players.length >= 5) &&
-    displayedPlayers.every(
-      (player) =>
-        !teams.some((team) => team.players.includes(player.player_name))
-    );
+  const areTeamsFull = teams.every((team) => team.players.length >= 5);
 
   return (
     <div className="w-full max-w-4xl">
       <h2 className="text-2xl font-bold mb-4 text-white">Lista de Jugadores</h2>
 
       {/* Barra de búsqueda */}
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        placeholder="Buscar jugador..."
-        className="w-full mb-4 px-4 py-2 bg-gray-800 text-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+      <div className="relative mb-4">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Buscar jugador..."
+          className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        {searchQuery && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-2 top-2 text-white bg-gray-700 rounded-full p-2 hover:bg-gray-600 focus:outline-none"
+            title="Clear search"
+            style={{ lineHeight: "0.75rem" }}
+          >
+            &times;
+          </button>
+        )}
+      </div>
 
-      {/* Tabla de Jugadores */}
+      {/* Player Table */}
       <table className="table-auto w-full bg-gray-800 rounded-lg shadow-md overflow-hidden">
         <thead>
           <tr className="bg-gray-700 text-white">
@@ -159,7 +179,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
                 Buscando jugadores...
               </td>
             </tr>
-          ) : paginatedPlayers.length === 0 ? (
+          ) : searchQuery && paginatedPlayers.length === 0 ? (
             <tr>
               <td colSpan={3} className="text-center py-4 text-white">
                 No hay resultados.
@@ -168,6 +188,8 @@ const PlayerList: React.FC<PlayerListProps> = ({
           ) : (
             paginatedPlayers.map((player) => {
               const playerTeam = getPlayerTeam(player.player_name);
+              const isPlayerOnTeam = playerTeam !== null;
+
               return (
                 <tr key={player.player_id} className="border-t border-gray-600">
                   <td className="px-4 py-2 text-gray-300 flex items-center">
@@ -180,16 +202,16 @@ const PlayerList: React.FC<PlayerListProps> = ({
                     {player.team_name}
                   </td>
                   <td className="px-4 py-2 flex justify-start items-center">
-                    {playerTeam ? (
+                    {isPlayerOnTeam ? (
                       <>
                         <span className="text-green-400">
-                          Jugando en {playerTeam.name}
+                          Jugando en {playerTeam!.name}
                         </span>
                         <button
                           onClick={() =>
                             onRemovePlayerFromTeam(
                               player.player_name,
-                              playerTeam.id
+                              playerTeam!.id
                             )
                           }
                           className="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
