@@ -68,7 +68,7 @@ export default function Home() {
             jugadores favoritos?
           </p>
           <p className="mb-8 text-xl font-bold uppercase tracking-wider">
-            Crea dos equipos de 5 jugadores cada uno, en donde{" "}
+            Crea dos equipos, en donde{" "}
             <span className="text-green-400 font-extrabold">
               tu mente será el límite
             </span>

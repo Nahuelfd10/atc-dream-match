@@ -38,14 +38,23 @@ const TeamList: React.FC<TeamListProps> = ({
           onBlur={onBlurTeamName}
           className="text-lg font-bold text-white mb-1 bg-transparent border-b-2 border-white focus:outline-none"
           autoFocus
+          maxLength={16} // Limita el nombre a 16 caracteres
         />
       ) : (
-        <h3
-          className="text-lg font-bold text-white mb-1 cursor-pointer"
+        <div
+          className="flex items-center mb-1 group cursor-pointer"
           onClick={() => onEditTeamName(teamId)}
         >
-          {teamName}
-        </h3>
+          <h3 className="text-lg font-bold text-white mr-1">
+            {teamName.length > 16
+              ? teamName.substring(0, 16) + "..."
+              : teamName}{" "}
+            {/* Trunca el nombre si excede los 16 caracteres */}
+          </h3>
+          <span className="text-gray-400 group-hover:text-white transition-colors duration-300">
+            ✎
+          </span>
+        </div>
       )}
 
       <ul className="list-none text-white mb-2 w-full">
