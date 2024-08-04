@@ -107,6 +107,7 @@ const MatchSetup: React.FC = () => {
         style={{
           backgroundImage: "url('/cancha3d.gif')",
           height: "300px",
+          width: "110%",
         }}
       >
         <div className="flex space-x-8 w-full">
