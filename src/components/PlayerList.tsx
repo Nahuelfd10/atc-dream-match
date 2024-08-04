@@ -108,6 +108,10 @@ const PlayerList: React.FC<PlayerListProps> = ({
     }
   };
 
+  const isNextPageAvailable =
+    (currentPage + 1) * playersPerPage < displayedPlayers.length;
+  const isPrevPageAvailable = currentPage > 0;
+
   const handleAddPlayer = (player: Player, teamId: number) => {
     const teamIndex = teams.findIndex((team) => team.id === teamId);
     if (teamIndex === -1) return;
@@ -241,16 +245,14 @@ const PlayerList: React.FC<PlayerListProps> = ({
         <div className="flex justify-between mt-4">
           <button
             onClick={handlePrevPage}
-            disabled={currentPage === 0}
+            disabled={!isPrevPageAvailable}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded disabled:opacity-50"
           >
             Anterior
           </button>
           <button
             onClick={handleNextPage}
-            disabled={
-              (currentPage + 1) * playersPerPage >= displayedPlayers.length
-            }
+            disabled={!isNextPageAvailable}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded disabled:opacity-50"
           >
             Siguiente

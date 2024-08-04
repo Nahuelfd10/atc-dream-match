@@ -28,8 +28,12 @@ const TeamList: React.FC<TeamListProps> = ({
   onBlurTeamName,
   onRemovePlayer,
 }) => {
+  // Calcular el número de jugadores en el equipo
+  const numPlayers = players.length;
+  const maxPlayers = 5;
+
   return (
-    <div className="flex flex-col items-center bg-gray-700 bg-opacity-80 p-3 rounded-lg shadow-lg w-1/3 relative">
+    <div className="flex flex-col items-center bg-gray-700 bg-opacity-80 p-3 rounded-lg shadow-lg w-1/3 relative h-full">
       {editing ? (
         <input
           type="text"
@@ -38,7 +42,7 @@ const TeamList: React.FC<TeamListProps> = ({
           onBlur={onBlurTeamName}
           className="text-lg font-bold text-white mb-1 bg-transparent border-b-2 border-white focus:outline-none"
           autoFocus
-          maxLength={16} // Limita el nombre a 16 caracteres
+          maxLength={16}
         />
       ) : (
         <div
@@ -49,7 +53,6 @@ const TeamList: React.FC<TeamListProps> = ({
             {teamName.length > 16
               ? teamName.substring(0, 16) + "..."
               : teamName}{" "}
-            {/* Trunca el nombre si excede los 16 caracteres */}
           </h3>
           <span className="text-gray-400 group-hover:text-white transition-colors duration-300">
             ✎
@@ -57,7 +60,7 @@ const TeamList: React.FC<TeamListProps> = ({
         </div>
       )}
 
-      <ul className="list-none text-white mb-2 w-full">
+      <ul className="list-none text-white mb-2 w-full flex-1">
         {players.map((player, index) => (
           <li
             key={index}
@@ -76,11 +79,18 @@ const TeamList: React.FC<TeamListProps> = ({
           </li>
         ))}
       </ul>
-      {players.length === 5 && (
-        <span className="text-green-400 font-bold mt-1 text-sm">
-          ¡Completo!
-        </span>
-      )}
+      <div className="mt-auto">
+        {numPlayers === maxPlayers ? (
+          <span className="text-green-400 font-bold mt-1 text-sm">
+            ¡Completo!
+          </span>
+        ) : (
+          <span className="text-white font-bold mt-1 text-sm flex items-center justify-center">
+            <span className="mr-1 text-gray-400">⚽🏃‍♂️</span> {numPlayers} /{" "}
+            {maxPlayers}
+          </span>
+        )}
+      </div>
     </div>
   );
 };
