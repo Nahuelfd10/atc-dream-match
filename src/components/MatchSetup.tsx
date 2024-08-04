@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import PlayerList from "@/components/PlayerList";
-import { mapPlayerTypeToSpanish } from "@/utils/positionMapping";
-import { recommendedPlayers, Player } from "@/utils/recommendedPlayers";
+import { Player, recommendedPlayers } from "@/utils/recommendedPlayers";
+import TeamList from "@/components/TeamList";
 
 interface Team {
   id: number;
@@ -108,65 +108,33 @@ const MatchSetup: React.FC = () => {
         className="flex justify-between items-center w-full mt-6 mb-4 relative bg-cover bg-center rounded-lg p-5"
         style={{
           backgroundImage: "url('/cancha3d.gif')",
-          height: "240px",
-          width: "100%",
+          height: "320px",
+          width: "115%",
           backgroundSize: "cover",
         }}
       >
         <div className="flex justify-between w-full px-12">
           {teams.map((team) => (
-            <div
+            <TeamList
               key={team.id}
-              className="flex flex-col items-center bg-gray-700 bg-opacity-80 p-3 rounded-lg shadow-lg w-1/3 relative"
-            >
-              {editingTeamId === team.id ? (
-                <input
-                  type="text"
-                  value={team.name}
-                  onChange={(e) => handleTeamNameChange(e, team.id)}
-                  onBlur={handleTeamNameBlur}
-                  className="text-lg font-bold text-white mb-1 bg-transparent border-b-2 border-white focus:outline-none"
-                  autoFocus
-                />
-              ) : (
-                <h3
-                  className="text-lg font-bold text-white mb-1 cursor-pointer"
-                  onClick={() => handleEditTeamName(team.id)}
-                >
-                  {team.name}
-                </h3>
-              )}
-
-              <ul className="list-none text-white mb-2 w-full">
-                {team.players.map((player, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center justify-between mb-1 bg-gray-800 px-2 py-1 rounded-md hover:bg-gray-700 group"
-                  >
-                    <span className="inline-block w-10 h-5 bg-green-600 text-white rounded-md text-center mr-2 flex items-center justify-center text-sm">
-                      {mapPlayerTypeToSpanish(player.player_type)}
-                    </span>
-                    <span className="flex-1 text-xs">{player.player_name}</span>
-                    <button
-                      onClick={() =>
-                        removePlayerFromTeam(player.player_id, team.id)
-                      }
-                      className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-0.5 px-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      ✖
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              {team.players.length === 5 && (
-                <span className="text-green-400 font-bold mt-1 text-sm">
-                  ¡Completo!
-                </span>
-              )}
-            </div>
+              teamId={team.id}
+              teamName={team.name}
+              players={team.players}
+              editing={editingTeamId === team.id}
+              onTeamNameChange={handleTeamNameChange}
+              onEditTeamName={handleEditTeamName}
+              onBlurTeamName={handleTeamNameBlur}
+              onRemovePlayer={removePlayerFromTeam}
+            />
           ))}
 
-          <span className="text-2xl font-bold text-white absolute top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2">
+          <span
+            className="text-7xl font-bold text-white absolute top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2"
+            style={{
+              lineHeight: "1.2",
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+            }}
+          >
             VS
           </span>
         </div>
