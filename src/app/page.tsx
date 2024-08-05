@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import MatchSetup from "@/components/MatchSetup";
 
@@ -35,7 +35,7 @@ export default function Home() {
 
         {/* Título Principal */}
         <motion.h1
-          className="relative z-10 text-6xl font-extrabold text-center text-white mb-8"
+          className="relative z-10 text-3xl md:text-5xl lg:text-6xl font-extrabold text-center text-white mb-8 px-4 md:px-0"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -57,7 +57,7 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <p
-            className="mb-4 text-xl font-semibold tracking-wider"
+            className="mb-4 text-base md:text-lg lg:text-xl font-semibold tracking-wider px-4 md:px-0"
             style={{
               paddingTop: "5vh",
               lineHeight: "1.2",
@@ -67,7 +67,7 @@ export default function Home() {
             ¿Has soñado con un partido de fútbol donde se enfrenten tus
             jugadores favoritos?
           </p>
-          <p className="mb-8 text-xl font-bold uppercase tracking-wider">
+          <p className="mb-8 text-base md:text-lg lg:text-xl font-bold uppercase tracking-wider px-4 md:px-0">
             Crea dos equipos, en donde{" "}
             <span className="text-green-400 font-extrabold">
               tu mente será el límite
@@ -78,14 +78,14 @@ export default function Home() {
 
         {/* Botón Principal */}
         <motion.div
-          className="relative z-10 mt-10 flex justify-center"
+          className="relative z-10 mt-6 md:mt-10 flex justify-center"
           initial={{ opacity: 0, scale: 2 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 1 }}
         >
           <motion.button
             onClick={showMatchSetup}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-xl transform hover:scale-105 transition-transform"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-xl shadow-lg text-lg md:text-xl transform hover:scale-105 transition-transform"
           >
             Crear el partido de mis sueños
           </motion.button>

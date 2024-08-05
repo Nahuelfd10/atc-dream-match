@@ -151,21 +151,24 @@ const MatchSetup: React.FC = () => {
   const areTeamsFull = teams.every((team) => team.players.length >= 5);
 
   return (
-    <div className="w-full max-w-4xl flex flex-col items-center relative">
-      <h2 className="text-3xl font-bold mb-4 text-white">Dream Match</h2>
+    <div className="w-full max-w-4xl flex flex-col items-center relative px-4 md:px-0">
+      <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+        Dream Match
+      </h2>
 
       <div
         className={`${
           showStatistics ? "blur-md" : ""
-        } flex justify-between items-center w-full mt-6 mb-4 relative bg-cover bg-center rounded-lg p-5`}
+        } flex flex-col md:flex-row justify-between items-center w-full mt-6 mb-4 relative bg-cover bg-center rounded-lg p-5`}
         style={{
-          backgroundImage: "url('/cancha3d.gif')",
-          height: "320px",
-          width: "115%",
+          backgroundImage:
+            window.innerWidth < 768 ? "none" : "url('/cancha3d.gif')",
+          height: window.innerWidth < 768 ? "auto" : "300px",
+          width: "105%",
           backgroundSize: "cover",
         }}
       >
-        <div className="flex justify-between space-x-8 w-full">
+        <div className="flex justify-between items-center space-y-4 md:space-y-0 md:space-x-8 w-full flex-col md:flex-row relative">
           {teams.map((team) => (
             <TeamList
               key={team.id}
@@ -179,24 +182,23 @@ const MatchSetup: React.FC = () => {
               onRemovePlayer={removePlayerFromTeam}
             />
           ))}
-
-          <span
-            className="text-7xl font-bold text-white absolute top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2"
-            style={{
-              lineHeight: "1.2",
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            VS
-          </span>
         </div>
+        <span
+          className="text-5xl md:text-7xl font-bold text-white absolute top-1/2 md:top-auto transform -translate-y-1/2 md:translate-y-0 right-0 md:right-auto md:left-1/2 md:translate-x-0"
+          style={{
+            lineHeight: "1.2",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+          }}
+        >
+          VS
+        </span>
       </div>
 
       <div className="w-full mt-3">
         <div
           className={`${
             showStatistics ? "hidden" : "flex"
-          } justify-between items-center mb-4`}
+          } flex-col md:flex-row justify-between items-center mb-4 space-y-4 md:space-y-0`}
         >
           <button
             onClick={generateRandomTeams}

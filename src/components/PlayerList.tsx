@@ -138,7 +138,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
   const areTeamsFull = teams.every((team) => team.players.length >= 5);
 
   return (
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-4xl pb-20">
       <h2 className="text-2xl font-bold mb-4 text-white">Lista de Jugadores</h2>
 
       {/* Barra de búsqueda */}
@@ -162,8 +162,88 @@ const PlayerList: React.FC<PlayerListProps> = ({
         )}
       </div>
 
-      {/* Player Table */}
-      <table className="table-auto w-full bg-gray-800 rounded-lg shadow-md overflow-hidden">
+      <table className="table-auto w-full bg-gray-800 rounded-lg shadow-md overflow-hidden block md:hidden">
+        <thead>
+          <tr className="bg-gray-700 text-white">
+            <th className="px-4 py-2 text-left">Jugador</th>
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            <tr>
+              <td colSpan={2} className="text-center py-4 text-white">
+                Buscando jugadores...
+              </td>
+            </tr>
+          ) : searchQuery && paginatedPlayers.length === 0 ? (
+            <tr>
+              <td colSpan={2} className="text-center py-4 text-white">
+                No hay resultados.
+              </td>
+            </tr>
+          ) : (
+            paginatedPlayers.map((player) => {
+              const playerTeam = getPlayerTeam(player.player_id);
+              const isPlayerOnTeam = playerTeam !== null;
+
+              return (
+                <tr key={player.player_id} className="border-t border-gray-600">
+                  <td className="px-4 py-2 text-gray-300 flex flex-col items-center">
+                    <div className="flex justify-between w-full">
+                      <span className="inline-block w-12 h-6 bg-green-600 text-white rounded-md text-center mr-2 flex items-center justify-center">
+                        {mapPlayerTypeToSpanish(player.player_type)}
+                      </span>
+                      <span className="flex-1 text-left">
+                        {player.player_name}
+                      </span>
+                      <span className="text-gray-400">{player.team_name}</span>
+                    </div>
+                    <div className="flex justify-center w-full mt-2">
+                      {isPlayerOnTeam ? (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-green-400 text-center">
+                            Jugando en {playerTeam!.name}
+                          </span>
+                          <button
+                            onClick={() =>
+                              onRemovePlayerFromTeam(
+                                player.player_id,
+                                playerTeam!.id
+                              )
+                            }
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-0.5 px-1.5 rounded-sm text-xs"
+                          >
+                            ✖
+                          </button>
+                        </div>
+                      ) : areTeamsFull ? (
+                        <span className="text-red-400 text-center">
+                          Equipos completos
+                        </span>
+                      ) : (
+                        <div className="flex space-x-2">
+                          {teams.map((team) => (
+                            <button
+                              key={team.id}
+                              onClick={() => handleAddPlayer(player, team.id)}
+                              disabled={team.players.length >= 5}
+                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded text-xs disabled:opacity-50"
+                            >
+                              {team.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
+        </tbody>
+      </table>
+
+      <table className="table-auto w-full bg-gray-800 rounded-lg shadow-md overflow-hidden hidden md:table">
         <thead>
           <tr className="bg-gray-700 text-white">
             <th className="px-4 py-2 text-left">Nombre</th>
