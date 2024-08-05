@@ -1,5 +1,5 @@
-# Usa la imagen base oficial de Node.js
-FROM node:16-alpine
+# Usa la imagen base oficial de Node.js 18
+FROM node:18-alpine
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Comando para correr la aplicación
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
